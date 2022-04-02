@@ -128,7 +128,7 @@ class SpecialtySDJpaServiceTest {
     @Test
     void testDeleteBDD() {
          willThrow(new RuntimeException("boom")).given(specialtyRepository).delete(any());
-        
+
         assertThrows(RuntimeException.class, () -> specialtyRepository.delete(new Specialty()));
 
         then(specialtyRepository).should().delete(any());

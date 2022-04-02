@@ -7,18 +7,20 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.*;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class SpecialtySDJpaServiceTest {
 
-    @Mock
+    @Mock()
     SpecialtyRepository specialtyRepository;
 
     @InjectMocks
@@ -133,4 +135,42 @@ class SpecialtySDJpaServiceTest {
 
         then(specialtyRepository).should().delete(any());
     }
+
+    @Test
+    void testSaveLambda() {
+        // given
+        final String MATCH_ME = "MATCH_ME";
+        Specialty specialty = new Specialty();
+        specialty.setDescription(MATCH_ME);
+
+        Specialty savedSpecialty = new Specialty();
+        savedSpecialty.setId(1L);
+
+        given(specialtyRepository.save(argThat(argument -> argument.getDescription().equals(MATCH_ME)))).willReturn(savedSpecialty);
+
+        // when
+        Specialty returnedSpecialty = service.save(specialty);
+
+        assertThat(returnedSpecialty.getId()).isEqualTo(1L);
+    }
+
+    @Test
+    @MockitoSettings(strictness = Strictness.LENIENT)
+    void testSaveLambdaNoMatch() {
+        // given
+        final String MATCH_ME = "MATCH_ME";
+        Specialty specialty = new Specialty();
+        specialty.setDescription("Not a match");
+
+        Specialty savedSpecialty = new Specialty();
+        savedSpecialty.setId(1L);
+
+        given(specialtyRepository.save(argThat(argument -> argument.getDescription().equals(MATCH_ME)))).willReturn(savedSpecialty);
+
+        // when
+        Specialty returnedSpecialty = service.save(specialty);
+
+        assertNull(returnedSpecialty);
+    }
+
 }

@@ -14,13 +14,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class SpecialitySDJpaServiceTest {
+class SpecialtySDJpaServiceTest {
 
     @Mock
     SpecialtyRepository specialtyRepository;
 
     @InjectMocks
-    SpecialitySDJpaService service;
+    SpecialtySDJpaService service;
 
     @Test
     void findByIdTest() {

@@ -8,11 +8,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 
-public class SpecialitySDJpaService implements SpecialtyService {
+public class SpecialtySDJpaService implements SpecialtyService {
 
     private final SpecialtyRepository specialtyRepository;
 
-    public SpecialitySDJpaService(SpecialtyRepository specialtyRepository) {
+    public SpecialtySDJpaService(SpecialtyRepository specialtyRepository) {
         this.specialtyRepository = specialtyRepository;
     }
 

@@ -5,9 +5,14 @@ import guru.springframework.sfgpetclinic.model.Owner;
 import guru.springframework.sfgpetclinic.services.OwnerService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -28,6 +33,9 @@ class OwnerControllerTest {
 
     @Mock
     BindingResult bindingResult;
+
+    @Captor
+    ArgumentCaptor<String> stringArgumentCaptor;
 
     @Test
     void processCreationFormHasErrors() {
@@ -54,5 +62,34 @@ class OwnerControllerTest {
 
         // then
         assertThat(viewName).isEqualToIgnoringCase(REDIRECT_OWNERS_5);
+    }
+
+    @Test
+    void processFormWildcardString() {
+        // given
+        Owner owner = new Owner(5L, "Joe", "Buck");
+        List<Owner> owners = new ArrayList<>();
+        final ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
+        given(ownerService.findAllByLastNameLike(captor.capture())).willReturn(owners);
+
+        // when
+        controller.processFindForm(owner, bindingResult, null);
+
+        // then
+        assertThat("%Buck%").isEqualToIgnoringCase(captor.getValue());
+    }
+
+    @Test
+    void processFormWildcardStringWithAnnotation() {
+        // given
+        Owner owner = new Owner(5L, "Joe", "Buck");
+        List<Owner> owners = new ArrayList<>();
+        given(ownerService.findAllByLastNameLike(stringArgumentCaptor.capture())).willReturn(owners);
+
+        // when
+        controller.processFindForm(owner, bindingResult, null);
+
+        // then
+        assertThat("%Buck%").isEqualToIgnoringCase(stringArgumentCaptor.getValue());
     }
 }

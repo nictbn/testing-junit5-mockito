@@ -11,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -70,5 +71,14 @@ class SpecialtySDJpaServiceTest {
         Specialty specialty = new Specialty();
         service.delete(specialty);
         verify(specialtyRepository).delete(any(Specialty.class));
+    }
+
+    @Test
+    void findByIdBDDTest() {
+        Specialty specialty = new Specialty();
+        given(specialtyRepository.findById(1L)).willReturn(Optional.of(specialty));
+        Specialty foundSpecialty = service.findById(1L);
+        assertThat(foundSpecialty).isNotNull();
+        verify(specialtyRepository).findById(anyLong());
     }
 }

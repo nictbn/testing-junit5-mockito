@@ -1,6 +1,6 @@
 package guru.springframework.sfgpetclinic.services.springdatajpa;
 
-import guru.springframework.sfgpetclinic.model.Speciality;
+import guru.springframework.sfgpetclinic.model.Specialty;
 import guru.springframework.sfgpetclinic.repositories.SpecialtyRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,11 +24,11 @@ class SpecialtySDJpaServiceTest {
 
     @Test
     void findByIdTest() {
-        Speciality speciality = new Speciality();
+        Specialty speciality = new Specialty();
         when(specialtyRepository.findById(1L)).thenReturn(Optional.of(speciality));
-        Speciality foundSpecialty = service.findById(1L);
+        Specialty foundSpecialty = service.findById(1L);
         assertThat(foundSpecialty).isNotNull();
-        verify(specialtyRepository).findById(1L);
+        verify(specialtyRepository).findById(anyLong());
     }
 
     @Test
@@ -62,6 +62,13 @@ class SpecialtySDJpaServiceTest {
 
     @Test
     void testDelete() {
-        service.delete(new Speciality());
+        service.delete(new Specialty());
+    }
+
+    @Test
+    void testDeleteByObject() {
+        Specialty specialty = new Specialty();
+        service.delete(specialty);
+        verify(specialtyRepository).delete(any(Specialty.class));
     }
 }

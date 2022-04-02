@@ -6,18 +6,18 @@ import java.util.Set;
 
 public class Vet extends Person {
 
-    private Set<Speciality> specialities = new HashSet<>();
+    private Set<Specialty> specialities = new HashSet<>();
 
-    public Vet(Long id, String firstName, String lastName, Set<Speciality> specialities) {
+    public Vet(Long id, String firstName, String lastName, Set<Specialty> specialities) {
         super(id, firstName, lastName);
         this.specialities = specialities;
     }
 
-    public Set<Speciality> getSpecialities() {
+    public Set<Specialty> getSpecialities() {
         return specialities;
     }
 
-    public void setSpecialities(Set<Speciality> specialities) {
+    public void setSpecialities(Set<Specialty> specialities) {
         this.specialities = specialities;
     }
 }
